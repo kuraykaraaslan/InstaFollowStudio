@@ -27,6 +27,9 @@ const NavBar = (user: any) => {
             <div className="flex-1">
                 <a className="btn btn-ghost text-xl">Instagram Follow Studio</a>
             </div>
+            <div className="flex-1">
+                <button className="btn" onClick={setDisabled}>Return to Instagram</button>
+            </div>
             <div className="flex-none gap-2">
                 <span className="text-lg font-bold">{user?.fullName || 'Loading...'}</span>
 

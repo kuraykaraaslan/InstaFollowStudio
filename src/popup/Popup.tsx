@@ -1,10 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react'
 import getElementByXpath from '../helpers';
-
-import { _getUsers, User } from '../utils/profiles';
-
-
+import { User } from '../utils/types';
+import { getUsersFromStorage, ResetStorage } from '../utils/actions';
 
 interface PopupProps {
   users: User[];
@@ -37,7 +35,7 @@ function setEnabled(): Promise<void> {
     //refresh
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const url = tabs[0].url || '';
-      chrome.tabs.update(tabs[0].id, { url: url });
+      chrome.tabs.update(tabs[0].id || 0, { url: url });
     });
     window.close();
   });
@@ -51,7 +49,7 @@ function setDisabled(): Promise<void> {
     //refresh
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const url = tabs[0].url || '';
-      chrome.tabs.update(tabs[0].id, { url: url });
+      chrome.tabs.update(tabs[0].id || 0, { url: url });
     });
     window.close();
   });
@@ -68,7 +66,7 @@ const changeToInstagram = async () => {
       });
     } else {
       // Navigate to Instagram
-      chrome.tabs.update(tabs[0].id, { url: 'https://www.instagram.com/' });
+      chrome.tabs.update(tabs[0].id || 0, { url: 'https://instagram.com' });
       // Close the popup
       window.close();
     }
@@ -108,7 +106,7 @@ export const Popup = () => {
 
   useEffect(() => {
     const getUsers = async () => {
-      const users = await _getUsers();
+      const users = await getUsersFromStorage();
       setUsers(users);
       setSelectedUser(users[0]);
     };
@@ -122,11 +120,11 @@ export const Popup = () => {
     <div className="grid grid-rows-1 p-2">
       <div className="pb-2">
         {/* Title */}
-        <p className="text-lg font-bold mb-1">
+        <p className="text-lg text-white font-bold mb-1">
           Instagram Follow Studio
         </p>
         {/* Subtext */}
-        <p className="text-white">Control your people</p>
+        <p className="text-white">Control your people <button className="text-gray-300 hover:text-white" onClick={ResetStorage}>Reset</button></p>
       </div>
       <div className="pb-2">
 
@@ -158,10 +156,10 @@ export const Popup = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr className="text-white">
               {/* Table data cells go here */}
-              <td className="p-2 border border-gray-300">{selectedUser?.unfollow || "N/A"}</td>
-              <td className="p-2 border border-gray-300">{selectedUser?.follow || "N/A"}</td>
+              <td className="p-2 border border-gray-300">{selectedUser?.followedByCount || "0"}</td>
+              <td className="p-2 border border-gray-300">{selectedUser?.followCount || "0"}</td>
             </tr>
             {/* Add more rows as needed */}
           </tbody>
@@ -181,7 +179,7 @@ export const Popup = () => {
           {!instagram && <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" onClick={changeToInstagram}>
             Open Instagram
           </button>}
-
+          
           <div className="justify-self-end">
             <p className="text-end font-bold">Created by <a href='https://kuray.dev' target='_blank'>kuray.dev</a> with ❤️</p>
           </div>

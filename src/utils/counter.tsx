@@ -1,6 +1,3 @@
-import {_addSnapshot } from "./profiles";
-import { Snapshot, User } from "./types";
-
 const fetchOptions = {
     credentials: "include",
     headers: {
@@ -59,21 +56,21 @@ const getFollowing = (user_id: number, count = 50, next_max_id = "") => {
 
 
 
-const getUserFriendshipStats = async (id: number) => {
-    const followers = await getFollowers(id);
-    const following = await getFollowing(id);
+const counter = async (id: number) => {
+    const followers = await getFollowers(id); // Fetch followers data asynchronously using the getFollowers function
+    const following = await getFollowing(id); // Fetch following data asynchronously using the getFollowing function
 
     const followersUsernames = followers.map((follower : any) =>
-        follower.username.toLowerCase(),
+        follower.username.toLowerCase(), // Extract and lowercase the usernames from the followers data
     );
     const followingUsernames = following.map((followed : any) =>
-        followed.username.toLowerCase(),
+        followed.username.toLowerCase(), // Extract and lowercase the usernames from the following data
     );
 
-    const followerSet = new Set(followersUsernames);
-    const followingSet = new Set(followingUsernames);
+    const followerSet = new Set(followersUsernames); // Create a unique set of lowercase follower usernames
+    const followingSet = new Set(followingUsernames); // Create a unique set of lowercase following usernames
 
-    console.log(Array(28).fill("-").join(""));
+    console.log(Array(28).fill("-").join("")); // Print a line of dashes
     console.log(
         `Fetched`,
         followerSet.size,
@@ -93,4 +90,4 @@ const getUserFriendshipStats = async (id: number) => {
 };
 
 
-export default getUserFriendshipStats;
+export default counter;

@@ -1,9 +1,9 @@
 {
   "name": "instafollowstudio",
-  "displayName": "InstaFollowStudio",
-  "version": "0.0.0",
+  "displayName": "Instagram Follow Studio",
+  "version": "1.0.0",
   "author": "Kuray Karaaslan",
-  "description": "",
+  "description": "Unlock the power of your Instagram with your ultimate follow/unfollow tracker!",
   "type": "module",
   "license": "MIT",
   "keywords": [
