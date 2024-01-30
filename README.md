@@ -14,7 +14,7 @@ InstaFollowStudio is a Chrome extension designed to help users track their Insta
 
 - **Privacy-Focused:** Your Instagram account information is processed locally on your device, ensuring the privacy and security of your data. The extension does not store or share any sensitive information.
 
-#Screenshots
+# Screenshots
 
 ![Screenshot](static/screenshot.png)
 
