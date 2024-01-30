@@ -1,6 +1,8 @@
 ![Logo](static/logo.png)
 
-# InstaFollowStudio Chrome Extension (Unpublished)
+# InstaFollowStudio Chrome Extension (Discontinued)
+
+This extension is unpublished from Chrome Web Store because of Copyright issue. So I decided to ı Will share the code if i can't publish it on Chrome App Store. 
 
 ## Overview
 
