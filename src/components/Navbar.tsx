@@ -25,7 +25,7 @@ const NavBar = (user: any) => {
     return (
         <div className="navbar bg-base-100 h-16 mb-4 rounded shadow-lg">
             <div className="flex-1">
-                <a className="btn btn-ghost text-xl">Instagram Follow Studio</a>
+                <a className="btn btn-ghost text-xl">Insta Follow Studio</a>
             </div>
             <div className="flex-1">
                 <button className="btn" onClick={setDisabled}>Return to Instagram</button>

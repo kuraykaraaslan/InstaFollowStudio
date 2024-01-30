@@ -15,7 +15,7 @@ import './index.css';
 import { User } from '../utils/types';
 
 // Utils
-import { addUserToStorage, fetchUserFromAPI } from '../utils/actions';
+import { addUserToStorage, fetchUserFromAPI, fetchUserFromSearchAPI } from '../utils/actions';
 
 
 export function Content() {
@@ -42,8 +42,13 @@ export function Content() {
     // Fetch user data from API when the username changes
     useEffect(() => {
         const fetchUser = async () => {
-            const user = await fetchUserFromAPI(userName); // Fetch user data from API based on the username
-            setUser(user); // Update the user state with the fetched user data
+            try {
+                const user = await fetchUserFromSearchAPI(userName); // Fetch user data from API based on the username
+                setUser(user); // Update the user state with the fetched user data
+            } catch (error) {
+                console.log(error); 
+                            
+            }
         }
         fetchUser();
     }, [userName]);

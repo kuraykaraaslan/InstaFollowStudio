@@ -121,7 +121,7 @@ export const Popup = () => {
       <div className="pb-2">
         {/* Title */}
         <p className="text-lg text-white font-bold mb-1">
-          Instagram Follow Studio
+          Insta Follow Studio
         </p>
         {/* Subtext */}
         <p className="text-white">Control your people <button className="text-gray-300 hover:text-white" onClick={ResetStorage}>Reset</button></p>

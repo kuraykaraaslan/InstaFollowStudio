@@ -18,6 +18,7 @@ const concatFriendshipsApiResponse: any = async (
     next_max_id = "",
 ) => {
     let url = `https://www.instagram.com/api/v1/friendships/${user_id}/${list}/?count=${count}`;
+    console.log(url);
     if (next_max_id) {
         url += `&max_id=${next_max_id}`;
     }

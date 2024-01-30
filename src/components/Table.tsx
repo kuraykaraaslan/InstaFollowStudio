@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { User, Snapshot, ThirdPerson } from '../utils/types';
 
-import { getUserSnapshots, createSnapshot, unfollowUser } from '../utils/actions';
+import { getUserSnapshots, createSnapshot, unfollowUser , createSnapshotFromUsername} from '../utils/actions';
 
 
 const Table = (user: any) => {
@@ -73,21 +73,46 @@ const Table = (user: any) => {
 
         } catch (error) {
             // Handle the error appropriately
-            setError("Something went wrong. Please try again later.");
+            setError("Something went wrong. Please try again later: " + error);
+
         }
     };
 
 
     const handleSnapshot = async () => {
         try {
-            const snapshot = await createSnapshot(user);
+            //check if user is present
+            const currentUser = user;
+            
+
+            console.log(user);
+            const snapshot = await createSnapshot(currentUser);
             setSnapshot(snapshot);
             setError("");
         } catch (error) {
             // Handle the error appropriately
-            setError("Something went wrong. Please try again later.");
+            setError("Something went wrong. Please try again later: " + error);
         }
     };
+
+    const handleSnapshotNew = async (username: string) => {
+        try {
+            //check if user is present
+            console.log(username);
+            if (user.username !== username) {
+                setError("Please update the user first");
+                return;
+            }
+            
+            const currentUser = await createSnapshotFromUsername(username, user.id);
+            setSnapshot(currentUser);
+            setError("");
+        } catch (error) {
+            // Handle the error appropriately
+            setError("Something went wrong. Please try again later: " + error);
+        }
+    }
+
 
 
     const pageUp = () => {
@@ -129,7 +154,7 @@ const Table = (user: any) => {
                 <a role="tab" className={`tab ${activeTab === 'notFollowing' ? 'tab-active' : ''}`} onClick={() => handleTabClick('notFollowing')}>Not Following</a>
                 <a role="tab" className={`tab ${activeTab === 'mutual' ? 'tab-active' : ''}`} onClick={() => handleTabClick('mutual')}>Mutual</a>
                 <a role="tab" className={`tab ${activeTab === 'fans' ? 'tab-active' : ''}`} onClick={() => handleTabClick('fans')}>Fans</a>
-                <a role="tab" className={`tab bg-red-500 text-white`} onClick={() => handleSnapshot()}>Update</a>
+                <a role="tab" className={`tab bg-red-500 text-white`} onClick={() => handleSnapshotNew(user.username)}>Update FOR {user.username}</a>
             </div>
             <div className="w-full bg-base-100">
 

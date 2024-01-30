@@ -118,14 +118,16 @@ function addUserToStorage(user: User): Promise<User[]> {
 
 async function fetchUserFromAPI(username: string): Promise<User> {
   const fetchUrl = `https://www.instagram.com/${username}/?__a=1&__d=dis`;
+  
 
   try {
     const response = await fetch(fetchUrl);
     const json = await response.json();
 
     const graphql = json?.graphql;
-    const user = json?.graphql?.user;
+    const useritem = json?.graphql?.user;
 
+    const user = useritem?.user;
     console.log(json);
 
     if (graphql === undefined || user === undefined) {
@@ -156,6 +158,49 @@ async function fetchUserFromAPI(username: string): Promise<User> {
     throw error;
   }
 }
+
+async function fetchUserFromSearchAPI(username: string): Promise<User> {
+  const fetchUrl = `https://www.instagram.com/web/search/topsearch/?context=blended&query=${username}&rank_token=0.3953592318270893&include_reel=true`;
+    try {
+      const response = await fetch(fetchUrl);
+      const json = await response.json();
+
+      const users = json?.users;
+      const user = json?.users[0]?.user;
+
+      console.log(json);
+
+      if (users === undefined || user === undefined) {
+        throw new Error('graphql is undefined');
+      }
+
+      if (!user) {
+        throw new Error('user is undefined');
+      }
+
+      const newUser: User = {
+        username: user?.username,
+        id: user?.id,
+        profilePicUrl: user?.profile_pic_url,
+        isPrivate: user?.is_private,
+        isVerified: user?.is_verified,
+        fullName: user?.full_name,
+        biography: user?.biography,
+        externalUrl: "https://www.instagram.com/" + user?.username,
+        followedByCount: 0,
+        followCount: 0,
+      };
+
+      console.log(newUser);
+      
+      return newUser;
+
+    } catch (error) {
+      throw error;
+    }
+  
+}
+
 
 function getSnapshotsFromStorage(): Promise<Snapshot[]> {
   return new Promise<Snapshot[]>((resolve, reject) => {
@@ -248,6 +293,48 @@ async function createSnapshot(user: User): Promise<Snapshot> {
   return snapshot;
 }
 
+async function createSnapshotFromUsername(username: string, userid: string): Promise<Snapshot> {
+
+  var userId = Number(userid);
+  console.log(userId);
+
+  var snapshot: Snapshot = {
+    timestamp: new Date(),
+    userid: userid,
+    followers: [] as ThirdPerson[],
+    following: [] as ThirdPerson[],
+  };
+
+  await counter(userId).then((data) => {
+    // CREATE SNAPSHOT
+
+    data?.followers?.forEach((f: any) => {
+      snapshot.followers.push({
+        username: f?.username,
+        id: f?.pk,
+        profilePicUrl: f?.profile_pic_url,
+        fullName: f?.full_name,
+      });
+    });
+
+    data?.following?.forEach((f: any) => {
+      snapshot.following.push({
+        username: f?.username,
+        id: f?.pk,
+        profilePicUrl: f?.profile_pic_url,
+        fullName: f?.full_name,
+      });
+    });
+
+
+  }).then(() => {
+    addSnapshotToStorage(snapshot);
+  });
+
+  return snapshot;
+}
+
+
 function getUserSnapshots(user: User): Promise<Snapshot[]> {
   return new Promise<Snapshot[]>((resolve, reject) => {
     getSnapshotsFromStorage()
@@ -272,4 +359,6 @@ export {
   createSnapshot,
   getUserSnapshots,
   unfollowUser,
+  fetchUserFromSearchAPI,
+  createSnapshotFromUsername,
 };
